@@ -1,0 +1,6 @@
+﻿  Building Custom Rule D:/GameEngine/OpenGL/External/glew/build/cmake/CMakeLists.txt
+  CMake does not need to re-run because D:/GameEngine/OpenGL/External/glew/build/MyBuild/CMakeFiles/generate.stamp is up-to-date.
+  glewinfo.c
+D:\GameEngine\OpenGL\External\glew\src\glewinfo.c(16413): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\stdio.h(2254): note: 参见“sscanf”的声明
+  glewinfo.vcxproj -> D:\GameEngine\OpenGL\External\glew\build\MyBuild\bin\Release\glewinfo.exe

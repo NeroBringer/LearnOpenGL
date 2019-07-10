@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\GameEngine\OpenGL\External\glew\build\MyBuild\CMakeFiles\7bc1113f89dbfe2e4e9a6bc279b4eb11\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{D6BD70AA-5023-37F2-BD62-DAE7B58884C6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

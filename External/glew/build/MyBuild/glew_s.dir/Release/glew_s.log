@@ -1,0 +1,4 @@
+﻿  Building Custom Rule D:/GameEngine/OpenGL/External/glew/build/cmake/CMakeLists.txt
+  CMake does not need to re-run because D:/GameEngine/OpenGL/External/glew/build/MyBuild/CMakeFiles/generate.stamp is up-to-date.
+  glew.c
+  glew_s.vcxproj -> D:\GameEngine\OpenGL\External\glew\build\MyBuild\lib\Release\libglew32.lib
