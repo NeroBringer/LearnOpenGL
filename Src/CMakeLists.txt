@@ -9,4 +9,5 @@ target_link_libraries(course1
 opengl32
 glfw3
 libglew32
+SOIL
 )
