@@ -67,6 +67,7 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
 	glAttachShader(this->Program, vertex);
 	glAttachShader(this->Program, fragment);
 	glLinkProgram(this->Program);
+
 	// 打印连接错误（如果有的话）
 	glGetProgramiv(this->Program, GL_LINK_STATUS, &success);
 	if (!success)
