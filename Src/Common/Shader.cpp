@@ -15,6 +15,19 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
 		// 打开文件
 		vShaderFile = AssetLoader::OpenFile(vertexPath);
 		fShaderFile = AssetLoader::OpenFile(fragmentPath);
+
+		if (!vShaderFile.is_open())
+		{
+			std::cout << "ERROR::VERTEX SHADER OPEN FAIL!" << std::endl;
+			return;
+		}
+
+		if (!fShaderFile.is_open())
+		{
+			std::cout << "ERROR::FRAG SHADER OPEN FAIL!" << std::endl;
+			return;
+		}
+
 		std::stringstream vShaderStream, fShaderStream;
 		// 读取文件的缓冲内容到流中
 		vShaderStream << vShaderFile.rdbuf();
