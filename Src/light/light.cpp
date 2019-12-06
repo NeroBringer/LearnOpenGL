@@ -76,152 +76,163 @@ int main()
 	// OpenGL options
 	glEnable(GL_DEPTH_TEST);
 
+
+	// 编译顶点作色器
+	Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
+
+	Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
+
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] = {
-		-0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-		-0.5f, -0.5f,  0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
 
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-		-0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-		-0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 	};
-#pragma region vbo
-
-	GLuint VBO, VAO;
-	glGenVertexArrays(1, &VAO);
+	// First, set the container's VAO (and VBO)
+	GLuint VBO, containerVAO;
+	glGenVertexArrays(1, &containerVAO);
 	glGenBuffers(1, &VBO);
-
-	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glBindVertexArray(containerVAO);
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	// Normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
 
+	// Then, we set the light's VAO (VBO stays the same. After all, the vertices are the same for the light object (also a 3D cube))
 	GLuint lightVAO;
 	glGenVertexArrays(1, &lightVAO);
 	glBindVertexArray(lightVAO);
+	// We only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need.
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	// 设置灯立方体的顶点属性指针(仅设置灯的顶点数据)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	// Set the vertex attributes (only position data for the lamp))
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0); // Note that we skip over the normal vectors
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
-#pragma endregion
-
-#pragma region shader
-
-	// 编译顶点作色器
-	Shader myShader("Shader/basic.vs", "Shader/objectColor.fs");
-
-	Shader lampShader("Shader/basic.vs", "Shader/lightColor.fs");
-#pragma endregion shader
-
-	glm::mat4 projection(1);
 
 
-	lastFrame = glfwGetTime();
-	//trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+	// Game loop
 	while (!glfwWindowShouldClose(window))
 	{
+		// Calculate deltatime of current frame
 		GLfloat currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 		do_movement();
-		//
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+		// Clear the colorbuffer
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glm::mat4 view;
-		view = camera.GetViewMatrix();
-		projection = glm::perspective(camera.Zoom, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
 
-		myShader.Use();
-		GLint modelLoc = glGetUniformLocation(myShader.Program, "model");
-		GLint viewLoc = glGetUniformLocation(myShader.Program, "view");
-		GLint projectionLoc = glGetUniformLocation(myShader.Program, "projection");
+		// Use cooresponding shader when setting uniforms/drawing objects
+		lightingShader.Use();
+		GLint lightPosLoc = glGetUniformLocation(lightingShader.Program, "light.position");
+		GLint viewPosLoc = glGetUniformLocation(lightingShader.Program, "viewPos");
+		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
+		glUniform3f(viewPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
+		// Set lights properties
+		glm::vec3 lightColor;
+		lightColor.x = sin(glfwGetTime() * 2.0f);
+		lightColor.y = sin(glfwGetTime() * 0.7f);
+		lightColor.z = sin(glfwGetTime() * 1.3f);
+		glm::vec3 diffuseColor = lightColor* glm::vec3(0.5f); // Decrease the influence
+		glm::vec3 ambientColor = diffuseColor* glm::vec3(0.2f); // Low influence
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "light.ambient"), ambientColor.x, ambientColor.y, ambientColor.z);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "light.diffuse"), diffuseColor.x, diffuseColor.y, diffuseColor.z);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "light.specular"), 1.0f, 1.0f, 1.0f);
+		// Set material properties
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 1.0f, 0.5f, 0.31f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 1.0f, 0.5f, 0.31f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 0.5f, 0.5f, 0.5f); // Specular doesn't have full effect on this object's material
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 32.0f);
 
+		// Create camera transformations
+		glm::mat4 view = camera.GetViewMatrix();
+		glm::mat4 projection = glm::perspective(camera.Zoom, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
+		// Get the uniform locations
+		GLint modelLoc = glGetUniformLocation(lightingShader.Program, "model");
+		GLint viewLoc = glGetUniformLocation(lightingShader.Program, "view");
+		GLint projLoc = glGetUniformLocation(lightingShader.Program, "projection");
+		// Pass the matrices to the shader
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-		glBindVertexArray(VAO);
+		// Draw the container (using container's vertex attributes)
+		glBindVertexArray(containerVAO);
 		glm::mat4 model(1);
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.2f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
+		// Also draw the lamp object, again binding the appropriate shader
 		lampShader.Use();
-
-		GLint objectColorLoc = glGetUniformLocation(lampShader.Program, "objectColor");
-		GLint lightColorLoc = glGetUniformLocation(lampShader.Program, "lightColor");
-		glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);
-		glUniform3f(lightColorLoc, 1.0f, 0.5f, 1.0f);
-
-
-		projectionLoc = glGetUniformLocation(lampShader.Program, "projection");
-		viewLoc = glGetUniformLocation(lampShader.Program, "view");
+		// Get location objects for the matrices on the lamp shader (these could be different on a different shader)
 		modelLoc = glGetUniformLocation(lampShader.Program, "model");
-
+		viewLoc = glGetUniformLocation(lampShader.Program, "view");
+		projLoc = glGetUniformLocation(lampShader.Program, "projection");
+		// Set matrices
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-		
-
-		glBindVertexArray(lightVAO);
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 		model = glm::mat4(1);
+		model = glm::translate(model, lightPos);
+		model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		// Draw the light object (using light's vertex attributes)
+		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
+		// Swap the screen buffers
 		glfwSwapBuffers(window);
 	}
-
-	glDeleteVertexArrays(1, &lightVAO);
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
 
 	// Terminate GLFW, clearing any resources allocated by GLFW.
 	glfwTerminate();
@@ -271,7 +282,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	lastX = xpos;
 	lastY = ypos;
 
-	//camera.ProcessMouseMovement(xoffset, yoffset);
+	camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
