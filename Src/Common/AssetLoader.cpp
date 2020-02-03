@@ -1,4 +1,6 @@
 #include "AssetLoader.hpp"
+#include "SOIL.h"
+#include <iostream>
 
 std::ifstream AssetLoader::OpenFile(const char* name)
 {
@@ -46,5 +48,25 @@ std::string AssetLoader::GetFileRealPath(const char* name)
 		upPath.append("../");
 	}
 	return "";
+}
+
+unsigned char* AssetLoader::LoadImage(
+	const char *filename,
+	int *width, int *height, int *channels,
+	int force_channels)
+{
+	unsigned char* imageData = SOIL_load_image(AssetLoader::GetFileRealPath(filename).c_str(), width, height, channels, force_channels);
+	if (imageData == NULL)
+	{
+		std::cout << "ERROR::LoadImage FAIL!" << std::endl;
+	}
+	return imageData;
+}
+
+void AssetLoader::FreeImageData(
+	unsigned char *img_data
+)
+{
+	SOIL_free_image_data(img_data);
 }
 
