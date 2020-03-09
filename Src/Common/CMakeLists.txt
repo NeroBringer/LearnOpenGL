@@ -1,4 +1,15 @@
-add_library(Common
-AssetLoader.cpp
-Shader.cpp
-)
+STRING( REGEX REPLACE ".*/(.*)" "\\1" CURRENT_FOLDER ${CMAKE_CURRENT_SOURCE_DIR} ) 
+#set(TARGETNAME "Common")
+
+file( GLOB_RECURSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h*)
+file( GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.c*)
+
+set(TARGETNAME ${CURRENT_FOLDER})
+
+add_library(${TARGETNAME} ${HEADER_FILES} ${SOURCE_FILES})
+
+#add_library(Common
+#AssetLoader.cpp
+#Shader.cpp
+#Mesh.cpp
+#)
