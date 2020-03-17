@@ -11,7 +11,8 @@ void Model::Draw(Shader shader)
 void Model::loadModel(std::string path)
 {
 	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+	std::string realPath = AssetLoader::GetFileRealPath(path.c_str());
+	const aiScene* scene = import.ReadFile(realPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -105,25 +106,6 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	}
 }
 
-// Checks all material textures of a given type and loads the textures if they're not loaded yet.
-// The required info is returned as a Texture struct.
-std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
-{
-	std::vector<Texture> textures;
-	for (GLuint i = 0; i < mat->GetTextureCount(type); i++)
-	{
-		aiString str;
-		mat->GetTexture(type, i, &str);
-		// Check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
-		Texture texture;
-		texture.id = TextureFromFile(str.C_Str(), this->directory);
-		texture.type = typeName;
-		texture.path = str;
-		textures.push_back(texture);
-	}
-	return textures;
-}
-
 GLint TextureFromFile(const char* path, std::string directory)
 {
 	//Generate texture ID and load texture data 
@@ -147,3 +129,36 @@ GLint TextureFromFile(const char* path, std::string directory)
 	SOIL_free_image_data(image);
 	return textureID;
 }
+
+// Checks all material textures of a given type and loads the textures if they're not loaded yet.
+// The required info is returned as a Texture struct.
+std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+{
+	std::vector<Texture> textures;
+	for (GLuint i = 0; i < mat->GetTextureCount(type); i++)
+	{
+		aiString str;
+		mat->GetTexture(type, i, &str);
+		GLboolean skip = false;
+		for (GLuint j = 0; j < textures_loaded.size(); j++)
+		{
+			if (textures_loaded[j].path == str)
+			{
+				textures.push_back(textures_loaded[j]);
+				skip = true;
+				break;
+			}
+		}
+		if (!skip)
+		{   // 如果纹理没有被加载过，加载之
+			Texture texture;
+			texture.id = TextureFromFile(str.C_Str(), this->directory);
+			texture.type = typeName;
+			texture.path = str;
+			textures.push_back(texture);
+			this->textures_loaded.push_back(texture);  // 添加到纹理列表 textures
+		}
+	}
+	return textures;
+}
+
