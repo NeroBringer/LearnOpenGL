@@ -5,9 +5,55 @@ project (LearnOpenGL)
 set (CMAKE_C_STANDARD 99)
 set (CMAKE_CXX_STANDARD 11)
 
+set(INCLUDE_DIR "${PROJECT_SOURCE_DIR}/External/${CMAKE_SYSTEM_NAME}/include")
+set(LIB_DIR "${PROJECT_SOURCE_DIR}/External/${CMAKE_SYSTEM_NAME}/lib")
+
 include_directories("${PROJECT_SOURCE_DIR}/Src/Common")
 include_directories("${PROJECT_SOURCE_DIR}/External/${CMAKE_SYSTEM_NAME}/include")
 
 link_directories("${PROJECT_SOURCE_DIR}/External/${CMAKE_SYSTEM_NAME}/lib")
 
-add_subdirectory(Src)
+if(WIN32)
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+endif(WIN32)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
+
+# find the required packages
+find_package(GLM REQUIRED)
+message(STATUS "GLM included at ${GLM_INCLUDE_DIR}")
+find_package(GLFW3 REQUIRED)
+message(STATUS "Found GLFW3 in ${GLFW3_INCLUDE_DIR}")
+find_package(ASSIMP REQUIRED)
+message(STATUS "Found ASSIMP in ${ASSIMP_INCLUDE_DIR}")
+# find_package(SOIL REQUIRED)
+# message(STATUS "Found SOIL in ${SOIL_INCLUDE_DIR}")
+# find_package(GLEW REQUIRED)
+# message(STATUS "Found GLEW in ${GLEW_INCLUDE_DIR}")
+
+set(LIBS glfw3 opengl32 assimp Common libglew32 SOIL)
+
+file(GLOB SOURCE
+            "Src/Common/*.hpp"
+            "Src/Common/*.cpp"
+        )
+
+add_library(Common ${SOURCE})
+
+set(CHAPTERS
+    mesh
+    light
+    course1
+)
+
+foreach(CHAPTER ${CHAPTERS})
+file (GLOB SOURCE
+"Src/${CHAPTER}/*.hpp"
+"Src/${CHAPTER}/*.cpp"
+)
+
+set(NAME "${CHAPTER}")
+add_executable(${NAME} ${SOURCE})
+target_link_libraries(${NAME} ${LIBS})
+
+endforeach(CHAPTER ${CHAPTERS})

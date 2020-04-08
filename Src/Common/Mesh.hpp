@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Shader.hpp"
+#include "assimp/types.h"
 
 struct Vertex 
 {
