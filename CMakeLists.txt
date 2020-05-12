@@ -44,6 +44,8 @@ set(CHAPTERS
     mesh
     light
     course1
+	advanced_opengl
+	FrameBuffer
 )
 
 foreach(CHAPTER ${CHAPTERS})
