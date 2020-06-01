@@ -46,6 +46,7 @@ set(CHAPTERS
     course1
 	advanced_opengl
 	FrameBuffer
+	Cubemaps
 )
 
 foreach(CHAPTER ${CHAPTERS})
