@@ -160,6 +160,9 @@ int main()
 	Model nanosuit("Model/nanosuit/nanosuit.obj");
 
 	
+	// Draw as wireframe
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 	// Game loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -168,21 +171,20 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
+		// Check and call events
 		glfwPollEvents();
 		do_movement();
 
 		// Clear buffers
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//skyboxShader.Use();
-		//glUseProgram(0);
-		glm::mat4 model(1);
+
+
+		// Draw scene as normal
+		shader.Use();
+		glm::mat4 model;
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 projection = glm::perspective(camera.Zoom, (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
-
-		shader.Use();
-		view = camera.GetViewMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -193,32 +195,31 @@ int main()
 		// Now draw the nanosuit
 		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
 		nanosuit.Draw(shader);
-		
+
 		// Draw skybox as last
-		//glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
-		
+		glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
+		skyboxShader.Use();
 		view = glm::mat4(glm::mat3(camera.GetViewMatrix()));	// Remove any translation component of the view matrix
-		/*glUniformMatrix4fv(glGetUniformLocation(skyboxShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(glGetUniformLocation(skyboxShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));*/
+		glUniformMatrix4fv(glGetUniformLocation(skyboxShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(glGetUniformLocation(skyboxShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		// skybox cube
 		glBindVertexArray(skyboxVAO);
-		//skyboxShader.Use();
-		//glActiveTexture(GL_TEXTURE0);
-		//glUniform1i(glGetUniformLocation(skyboxShader.Program, "skybox"), 0);
-		//glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
-		//glDrawArrays(GL_TRIANGLES, 0, 36);
-		//glBindVertexArray(0);
-		//glDepthFunc(GL_LESS); // Set depth function back to default
+		glActiveTexture(GL_TEXTURE0);
+		glUniform1i(glGetUniformLocation(shader.Program, "skybox"), 0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+		glDepthFunc(GL_LESS); // Set depth function back to default
 
 
-		// Swap the screen buffers
+							  // Swap the buffers
 		glfwSwapBuffers(window);
 	}
 
-	// Terminate GLFW, clearing any resources allocated by GLFW.
 	glfwTerminate();
 	return 0;
 }
+
 
 // This function loads a texture from file. Note: texture loading functions like these are usually 
 // managed by a 'Resource Manager' that manages all resources (like textures, models, audio). 
