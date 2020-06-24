@@ -5,6 +5,35 @@ project (LearnOpenGL)
 set (CMAKE_C_STANDARD 99)
 set (CMAKE_CXX_STANDARD 11)
 
+MACRO(SUBDIRLIST result curdir)
+
+
+ FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
+
+
+ SET(dirlist"")
+
+
+ FOREACH(child ${children})
+
+
+ IF(IS_DIRECTORY ${curdir}/${child})
+
+
+ LIST(APPEND dirlist ${child})
+
+
+ ENDIF()
+
+
+ ENDFOREACH()
+
+
+ SET(${result} ${dirlist})
+
+
+ENDMACRO()
+
 set(INCLUDE_DIR "${PROJECT_SOURCE_DIR}/External/${CMAKE_SYSTEM_NAME}/include")
 set(LIB_DIR "${PROJECT_SOURCE_DIR}/External/${CMAKE_SYSTEM_NAME}/lib")
 
@@ -40,17 +69,21 @@ file(GLOB SOURCE
 
 add_library(Common ${SOURCE})
 
-set(CHAPTERS
-    mesh
-    light
-    course1
-	advanced_opengl
-	FrameBuffer
-	Cubemaps
-	Geometry_Shader
-)
+SUBDIRLIST(sourceSubDirs "${PROJECT_SOURCE_DIR}/Src")
 
-foreach(CHAPTER ${CHAPTERS})
+#set(CHAPTERS
+#   mesh
+#    light
+#    course1
+#	advanced_opengl
+#	FrameBuffer
+#	Cubemaps
+#	Geometry_Shader
+#	Instancing
+#)
+message(STATUS "subDirs${sourceSubDirs}")
+foreach(CHAPTER ${sourceSubDirs})
+if (NOT ${CHAPTER} STREQUAL "Common")
 file (GLOB SOURCE
 "Src/${CHAPTER}/*.hpp"
 "Src/${CHAPTER}/*.cpp"
@@ -60,4 +93,5 @@ set(NAME "${CHAPTER}")
 add_executable(${NAME} ${SOURCE})
 target_link_libraries(${NAME} ${LIBS})
 
-endforeach(CHAPTER ${CHAPTERS})
+endif()
+endforeach(CHAPTER ${sourceSubDirs})
