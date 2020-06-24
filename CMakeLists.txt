@@ -47,6 +47,7 @@ set(CHAPTERS
 	advanced_opengl
 	FrameBuffer
 	Cubemaps
+	Geometry_Shader
 )
 
 foreach(CHAPTER ${CHAPTERS})
